@@ -69,7 +69,7 @@ defmodule PrometheusPlugsTest do
                labels: ["GET", 12]
              )
 
-    assert sum > 1.0 and sum < 1.2
+    assert sum > 1.0e-10 and sum < 1.0e-8
     assert 3 = length(buckets)
     assert 1 = Enum.reduce(buckets, fn x, acc -> x + acc end)
   end
