@@ -154,10 +154,15 @@ defmodule Prometheus.PlugPipelineInstrumenter do
           stop = :erlang.monotonic_time()
 
           diff =
-            if unquote(duration_unit) != :microseconds do
-              :erlang.convert_time_unit(stop - start, :native, unquote(duration_unit))
-            else
-              stop - start
+            case unquote(duration_unit) do
+              :seconds ->
+                (stop - start) / 1_000_000_000
+
+              :microseconds ->
+                stop - start
+
+              unit ->
+                :erlang.convert_time_unit(stop - start, :native, unit)
             end
 
           Histogram.observe(
